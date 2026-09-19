@@ -25,9 +25,20 @@ Instead of chasing breakouts naively, LeadFlow detects structural accumulation:
 * **Dynamic Sizing & Risk:** Positions are sized dynamically on risk-per-share with a strict ATR(14) × 2.5 trailing stop and a 25-bar hard hold cap to prevent time-decaying capital[cite: 8].
 
 ## 📊 Backtest Results & Walk-Forward Performance (2022-2026)
-The system was rigorously tested across multiple walk-forward folds using continuous compounded conventions and a highly realistic Indian cost model (0.585% round-trip including STT, brokerage, GST, and slippage)[cite: 8]. 
+The system was rigorously tested across multiple walk-forward folds using continuous compounded conventions and a highly realistic Indian cost model (0.585% round-trip including STT, brokerage, GST, and slippage). 
 
-To model real-world deployment, the strategy is evaluated within a **30/50/20 Book Allocation**: 30% Strategy Sleeve, 50% Arbitrage (6.5% p.a.), and 20% Gold ETF (GOLDBEES)[cite: 8].
+To model real-world deployment, the strategy is evaluated within a **30/50/20 Book Allocation**: 30% Strategy Sleeve, 50% Arbitrage (6.5% p.a.), and 20% Gold ETF (GOLDBEES).
+
+### Discovery Window 1: 2015-2021
+| Metric | Strategy Sleeve | Total Book (30/50/20) |
+| :--- | :--- | :--- |
+| **Total Return** | 90.36%| 73.76%|
+| **CAGR** | 9.97% | 8.50% |
+| **Max Drawdown** | -18.28% | -3.55% |
+| **Sharpe Ratio** | 0.26 | 0.41 |
+| **Win Rate** | 59.4% | - |
+| **Profit Factor** | 1.59 | - |
+| **Beta (vs Nifty 500)** | 0.219 | 0.053 |
 
 | Metric | Strategy Sleeve | Total Book (30/50/20) |
 | :--- | :--- | :--- |
