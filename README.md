@@ -1,51 +1,61 @@
 <div align="center">
 
 # 📈 LeadFlow
-
-**Systematic accumulation-to-expansion swing trading research platform for NSE mid/small-cap stocks.**
+**A Systematic Accumulation-to-Expansion Swing Strategy & 3D Market Terminal**
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](#)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg?style=for-the-badge&logo=typescript&logoColor=white)](#)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688.svg?style=for-the-badge&logo=fastapi&logoColor=white)](#)
-[![React](https://img.shields.io/badge/React_Vite-Frontend-20232A.svg?style=for-the-badge&logo=react&logoColor=61DAFB)](#)
+[![React](https://img.shields.io/badge/React-Frontend-20232A.svg?style=for-the-badge&logo=react&logoColor=61DAFB)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg?style=for-the-badge&logo=typescript&logoColor=white)](#)
+[![Pandas](https://img.shields.io/badge/Pandas-Quant_Engine-150458.svg?style=for-the-badge&logo=pandas&logoColor=white)](#)
 
 </div>
 
 ---
 
 ## 🚀 Overview
+LeadFlow is an advanced market intelligence system and quantitative research terminal built specifically for the NSE Mid/Smallcap universe (Nifty Midcap 150 + Smallcap 250). It combines a rigorous walk-forward validated backtest engine with a custom lightweight 3D isometric frontend for live forward-testing and market breadth visualization.
 
-LeadFlow is an advanced, high-performance market intelligence system built for algorithmic swing trading research. Designed specifically for the Indian equity markets (NSE), it features a daily scanner, a walk-forward validated backtest engine, and portfolio simulation that accounts for realistic Indian trading costs like STT and slippage. 
+The core premise relies on an **accumulation-to-expansion** framework: the system algorithms buy mid/smallcap equities that have already made a strong, visible move (+20% in 10 sessions), wait for the stock to build a nested consolidation base, and enter on the breakout of that base.
 
-*Note: This is a private research terminal and quantitative tool, not investment advice.*
+## 🧠 The Trading Thesis & Geometry
+Instead of chasing breakouts naively, LeadFlow detects structural accumulation:
+* **The Admission Gate:** Identifies stocks with a +20% move within 10 sessions, sitting within 5% of their 52-week high[cite: 8]. *Validation:* This specific filter produces a **2.54x lift** in the rate of subsequent 30% moves (11.13% vs. 4.38% base rate)[cite: 8].
+* **Nested Box Geometry:** The algorithm scans for a "big box" (15-25% range over 10-45 bars) containing a tighter "small box" (5-10% range over 5-22 bars)[cite: 8]. 
+* **Dynamic Sizing & Risk:** Positions are sized dynamically on risk-per-share with a strict ATR(14) × 2.5 trailing stop and a 25-bar hard hold cap to prevent time-decaying capital[cite: 8].
 
-## ✨ Key Features
+## 📊 Backtest Results & Walk-Forward Performance (2022-2026)
+The system was rigorously tested across multiple walk-forward folds using continuous compounded conventions and a highly realistic Indian cost model (0.585% round-trip including STT, brokerage, GST, and slippage)[cite: 8]. 
 
-* **Daily Market Scanner:** Automated screening for mid/small-cap accumulation and expansion setups.
-* **3D Market Structure UI:** Interactive, canvas-based visual representation of sector performance and market breadth.
-* **Walk-Forward Validated Backtesting:** Rigorous historical testing engine to validate trading strategies against out-of-sample data.
-* **Realistic Portfolio Simulation:** Incorporates exact Indian taxation (STT, exchange transaction charges, GST, stamp duty) and simulated slippage for highly accurate equity curves.
-* **Live Forward-Testing Terminal:** Dashboard for monitoring live actionable candidates and portfolio health.
+To model real-world deployment, the strategy is evaluated within a **30/50/20 Book Allocation**: 30% Strategy Sleeve, 50% Arbitrage (6.5% p.a.), and 20% Gold ETF (GOLDBEES)[cite: 8].
 
-## 🛠️ Tech Stack
+| Metric | Strategy Sleeve | Total Book (30/50/20) |
+| :--- | :--- | :--- |
+| **Total Return** | 132.68%[cite: 8] | 88.82%[cite: 8] |
+| **CAGR** | 20.46%[cite: 8] | 15.04%[cite: 8] |
+| **Max Drawdown** | -19.80%[cite: 8] | -5.65%[cite: 8] |
+| **Sharpe Ratio** | 0.86[cite: 8] | 1.28[cite: 8] |
+| **Win Rate** | 57.4%[cite: 8] | - |
+| **Profit Factor** | 1.57[cite: 8] | - |
+| **Beta (vs Nifty 500)** | 0.418[cite: 8] | 0.166[cite: 8] |
 
-### Backend
-* **Python** (Core Logic, Backtesting Engine, API)
-* **FastAPI** (High-performance async REST API)
-* **Pandas / NumPy** (Quantitative data manipulation and metric calculation)
-* **SQLite** (Local database for historical scans and portfolio state)
+*Note: The variant (c) exit ladder deployed scales out at +12% (50%), +20% (20%), and trails the remaining 30%[cite: 8].*
 
-### Frontend
-* **TypeScript / React** (Component-based interactive UI)
-* **Vite** (Next-generation lightning-fast frontend tooling)
-* **Canvas 2D / Custom Rendering** (For lightweight isometric 3D market visualization)
-* **CSS / Tailwind** (Modern, sleek, dark-mode-first styling)
+## ✨ Key Platform Features
+* **Daily Quantitative Scanner:** Automated screening for mid/smallcap accumulation and expansion setups.
+* **3D Market Structure UI:** An interactive, canvas-based visual representation of sector towers, market breadth, and live candidates running locally via Vite.
+* **Realistic Portfolio Simulation:** The backtester accounts for exact Indian taxation and penalizes gapped fills.
+* **Multi-Timeframe Context:** Evaluates daily, weekly, and monthly breakout confluences and drawdown-conditional relative strength[cite: 8].
+
+## 🛠️ Tech Stack Architecture
+* **Backend:** Python, FastAPI, Pandas, NumPy, SQLite (Historical scans & portfolio state).
+* **Frontend:** TypeScript, React, Vite, Tailwind CSS, HTML5 Canvas (Isometric rendering).
 
 ## 💻 Local Development Setup
 
-Follow these steps to run LeadFlow entirely on your local machine.
+To run LeadFlow's backend engine and 3D terminal locally on your machine:
 
-### 1. Clone the Repository
+**1. Clone the Repository**
 ```bash
 git clone [https://github.com/kanikakataria75-ship-it/leadflow.git](https://github.com/kanikakataria75-ship-it/leadflow.git)
 cd leadflow
