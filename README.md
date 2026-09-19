@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📈 LeadFlow
+# LeadFlow
 **A Systematic Accumulation-to-Expansion Swing Strategy & 3D Market Terminal**
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](#)
@@ -13,12 +13,12 @@
 
 ---
 
-## 🚀 Overview
+##  Overview
 LeadFlow is an advanced market intelligence system and quantitative research terminal built specifically for the NSE Mid/Smallcap universe (Nifty Midcap 150 + Smallcap 250). It combines a rigorous walk-forward validated backtest engine with a custom lightweight 3D isometric frontend for live forward-testing and market breadth visualization.
 
 The core premise relies on an **accumulation-to-expansion** framework: the system algorithms buy mid/smallcap equities that have already made a strong, visible move (+20% in 10 sessions), wait for the stock to build a nested consolidation base, and enter on the breakout of that base.
 
-## 🧠 The Trading Thesis & Geometry
+##  The Trading Thesis & Geometry
 Instead of chasing breakouts naively, LeadFlow detects structural accumulation:
 * **The Admission Gate:** Identifies stocks with a +20% move within 10 sessions, sitting within 5% of their 52-week high[cite: 8]. *Validation:* This specific filter produces a **2.54x lift** in the rate of subsequent 30% moves (11.13% vs. 4.38% base rate)[cite: 8].
 * **Nested Box Geometry:** The algorithm scans for a "big box" (15-25% range over 10-45 bars) containing a tighter "small box" (5-10% range over 5-22 bars)[cite: 8]. 
@@ -31,15 +31,15 @@ To model real-world deployment, the strategy is evaluated within a **30/50/20 Bo
 
 | Metric | Strategy Sleeve | Total Book (30/50/20) |
 | :--- | :--- | :--- |
-| **Total Return** | 132.68%[cite: 8] | 88.82%[cite: 8] |
-| **CAGR** | 20.46%[cite: 8] | 15.04%[cite: 8] |
-| **Max Drawdown** | -19.80%[cite: 8] | -5.65%[cite: 8] |
-| **Sharpe Ratio** | 0.86[cite: 8] | 1.28[cite: 8] |
-| **Win Rate** | 57.4%[cite: 8] | - |
-| **Profit Factor** | 1.57[cite: 8] | - |
-| **Beta (vs Nifty 500)** | 0.418[cite: 8] | 0.166[cite: 8] |
+| **Total Return** | 132.68% | 88.82% |
+| **CAGR** | 20.46% | 15.04% |
+| **Max Drawdown** | -19.80% | -5.65% |
+| **Sharpe Ratio** | 0.86| 1.28 |
+| **Win Rate** | 57.4% | - |
+| **Profit Factor** | 1.57 | - |
+| **Beta (vs Nifty 500)** | 0.418 | 0.166|
 
-*Note: The variant (c) exit ladder deployed scales out at +12% (50%), +20% (20%), and trails the remaining 30%[cite: 8].*
+*Note: The variant (c) exit ladder deployed scales out at +12% (50%), +20% (20%), and trails the remaining 30%.*
 
 ## ✨ Key Platform Features
 * **Daily Quantitative Scanner:** Automated screening for mid/smallcap accumulation and expansion setups.
