@@ -102,6 +102,15 @@ def _verify(token: str) -> dict[str, Any] | None:
 
 
 def is_authenticated(request: Request) -> bool:
+    # Local development: with no APP_PASSWORD set there is nothing to log in
+    # *with*, so the fail-closed gate would lock the owner out of their own
+    # machine. Loopback requests count as authenticated in that case only.
+    # Both conditions matter: a deployed instance is not on loopback so it
+    # stays gated, and setting APP_PASSWORD restores the gate everywhere.
+    client = request.client.host if request.client else None
+    if not password_configured() and client in ("127.0.0.1", "::1"):
+        return True
+
     tok = request.cookies.get(COOKIE)
     return bool(tok and _verify(tok))
 
