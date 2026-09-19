@@ -1,0 +1,38 @@
+# Secrets
+.env
+
+# Local data cache. Never committed: 270MB, and rebuildable from the vendors.
+nifty_swing_bot/cache/
+
+# Generated research artefacts. Ignored by default BUT the two files the
+# terminal serves are force-included below -- without them the deployed
+# Backtest and Book pages return 503, because they are the only source of the
+# frozen results and the persisted series.
+nifty_swing_bot/results/*
+!nifty_swing_bot/results/leadflow_frozen_results.json
+!nifty_swing_bot/results/leadflow_series.json
+
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Frontend
+node_modules/
+nifty_swing_bot/ui/dist/
+nifty_swing_bot/frontend_dab_archived/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local research / analysis artifacts
+LeadFlow_Research_Thesis.pdf
+accepted_trades_detailed.csv
+high_confidence_losses.csv
+rejected_trades_detailed.csv
+trade_decision_analysis_report.md

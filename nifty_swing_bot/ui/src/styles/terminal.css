@@ -1,0 +1,302 @@
+/* Terminal chrome: command bar, palette, market city, orbit, frozen core.
+ *
+ * Split out of base.css so the primitives (type, tables, panels, tokens) stay
+ * separable from the section-specific metaphors layered on top of them. */
+
+/* ===========================================================================
+   Command bar - floating glass navigation, replacing the sidebar
+   =========================================================================== */
+.cmdbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding: var(--s-3) var(--s-4) 0;
+  pointer-events: none;
+}
+
+.cmdbar-inner {
+  pointer-events: auto;
+  max-width: 1720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-2) var(--s-3) var(--s-2) var(--s-4);
+  border-radius: 999px;
+  background: var(--glass-2);
+  backdrop-filter: blur(var(--glass-blur-strong)) saturate(1.3);
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(1.3);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--shadow-3);
+}
+
+.cmd-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  text-decoration: none;
+  color: var(--ink);
+  flex: none;
+}
+.cmd-brand-name {
+  font-size: var(--t-md);
+  font-weight: 700;
+  letter-spacing: var(--ls-tightest);
+}
+
+.cmd-nav {
+  display: flex;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cmd-nav::-webkit-scrollbar { display: none; }
+
+.cmd-nav a {
+  position: relative;
+  flex: none;
+  padding: 6px var(--s-3);
+  border-radius: 999px;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  letter-spacing: var(--ls-tight);
+  color: var(--ink-3);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--d-fast) var(--ease), background var(--d-fast) var(--ease);
+}
+.cmd-nav a:hover { color: var(--ink); background: rgba(255, 255, 255, 0.04); }
+.cmd-nav a.active {
+  color: var(--ink);
+  background: var(--accent-dim);
+  box-shadow: inset 0 0 0 1px var(--accent-line);
+}
+/* The active marker is a dot under the label: legible at a glance, and unlike a
+   weight change it does not alter the label width and shift its neighbours. */
+.cmd-nav a.active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 3px;
+  height: 3px;
+  margin-left: -1.5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.cmd-right { display: flex; align-items: center; gap: var(--s-3); flex: none; }
+.cmd-config { font-size: var(--t-xs); color: var(--ink-3); white-space: nowrap; }
+
+.cmd-k {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 5px 10px 5px var(--s-3);
+  border-radius: 999px;
+  border: 1px solid var(--hairline-strong);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--t-xs);
+  cursor: pointer;
+  transition: border-color var(--d-fast) var(--ease), background var(--d-fast) var(--ease);
+}
+.cmd-k:hover { border-color: var(--accent-line); background: var(--accent-dim); }
+.cmd-k kbd {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--hairline);
+  color: var(--ink-2);
+}
+
+@media (max-width: 1100px) { .cmd-config { display: none; } }
+@media (max-width: 760px) {
+  .cmd-k span { display: none; }
+  .cmdbar { padding: var(--s-2) var(--s-2) 0; }
+  .cmdbar-inner { gap: var(--s-2); padding-left: var(--s-3); }
+}
+
+/* ===========================================================================
+   Command palette
+   =========================================================================== */
+.palette-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(4, 5, 7, 0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12vh var(--s-4) var(--s-4);
+  animation: fade var(--d-fast) var(--ease) forwards;
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.palette {
+  width: min(640px, 100%);
+  background: var(--glass-2);
+  backdrop-filter: blur(var(--glass-blur-strong));
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong));
+  border: 1px solid var(--hairline-bright);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.palette-input {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--t-md);
+  padding: var(--s-4) var(--s-5);
+  outline: none;
+}
+.palette-input::placeholder { color: var(--ink-4); }
+.palette-list { max-height: 46vh; overflow-y: auto; padding: var(--s-2); }
+.palette-group {
+  padding: var(--s-3) var(--s-3) var(--s-1);
+  font-size: var(--t-micro);
+  font-weight: 600;
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.palette-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: 8px var(--s-3);
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--t-sm);
+  text-align: left;
+  cursor: pointer;
+}
+.palette-item.on {
+  background: var(--accent-dim);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--accent-line);
+}
+.palette-foot { padding: var(--s-2) var(--s-5); border-top: 1px solid var(--hairline); }
+
+/* ===========================================================================
+   Market city
+   =========================================================================== */
+.city { position: relative; width: 100%; display: block; }
+.city canvas { display: block; width: 100%; height: 100%; }
+.city-hit { position: absolute; inset: 0; cursor: pointer; }
+
+.city-legend {
+  display: flex;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+  align-items: center;
+  padding: var(--s-2) var(--s-4);
+  border-top: 1px solid var(--hairline);
+}
+
+/* ===========================================================================
+   Home
+   =========================================================================== */
+.home-city {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 24%, #000 84%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 24%, #000 84%, transparent 100%);
+}
+
+.hero-tag { font-size: var(--t-sm); color: var(--ink-3); letter-spacing: var(--ls-tight); }
+
+.home-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s-6);
+  border-top: 1px solid var(--hairline);
+  padding: var(--s-5) var(--s-6);
+  max-width: 1100px;
+  width: 100%;
+}
+.home-strip h4 {
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+@media (max-width: 860px) {
+  .home-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-4); }
+}
+
+/* ===========================================================================
+   Capital orbit
+   =========================================================================== */
+.orbit { position: relative; display: block; width: 100%; }
+.orbit canvas { display: block; width: 100%; height: 100%; }
+.orbit-hit { position: absolute; inset: 0; cursor: pointer; }
+
+/* ===========================================================================
+   Frozen core
+   =========================================================================== */
+.core-ring { position: relative; display: grid; place-items: center; padding: var(--s-6); }
+.core-badge {
+  width: 122px;
+  height: 122px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--accent-line);
+  background: radial-gradient(circle at 50% 35%, rgba(76, 141, 255, 0.16), transparent 70%);
+  box-shadow: 0 0 0 10px rgba(76, 141, 255, 0.04), inset 0 0 26px rgba(76, 141, 255, 0.09);
+  text-align: center;
+}
+
+/* ===========================================================================
+   Hero numbers - the Book headline on Backtest
+   =========================================================================== */
+.hero-metric { display: flex; flex-direction: column; gap: 3px; }
+.hero-metric .v {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-4xl);
+  font-weight: 500;
+  letter-spacing: var(--ls-tightest);
+  line-height: 1;
+}
+.hero-metric .l {
+  font-size: var(--t-micro);
+  font-weight: 600;
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+@media (max-width: 860px) { .hero-metric .v { font-size: var(--t-2xl); } }
+
+/* ===========================================================================
+   Experiment timeline (forward record)
+   =========================================================================== */
+.exp-rail { display: flex; align-items: flex-start; gap: 0; padding: var(--s-5) 0 var(--s-3); }
+.exp-step { display: flex; flex-direction: column; align-items: center; gap: 7px; flex: 1; text-align: center; }
+.exp-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--surface-3);
+  border: 1px solid var(--hairline-bright);
+}
+.exp-dot.on { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-dim); }
+.exp-conn { flex: none; width: 100%; height: 1px; background: var(--hairline-strong); margin-top: 4px; }

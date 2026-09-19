@@ -1,0 +1,86 @@
+# Daily LeadFlow scan.
+#
+# The scan runs HERE rather than on the web host, deliberately:
+#
+#   * Render's free tier has no cron and no persistent disk. A scan there would
+#     re-download ~400 symbols on every cold start.
+#   * GitHub Actions can cache the OHLCV directory between runs, so a normal day
+#     fetches only the new bars.
+#   * It runs whether or not a laptop is open, which is the whole point -- the
+#     forward record only means something if it accumulates without supervision.
+#
+# The job writes straight to Postgres via DATABASE_URL. It never touches the web
+# service, so a sleeping free-tier backend does not stop the record growing.
+
+name: daily-scan
+
+on:
+  schedule:
+    # 12:30 UTC = 18:00 IST, comfortably after the NSE close (10:00 UTC).
+    # Cron here is UTC and GitHub does not observe any local DST.
+    - cron: "30 12 * * 1-5"
+  workflow_dispatch:        # lets you run one by hand from the Actions tab
+
+concurrency:
+  # Never let a manual run overlap a scheduled one: both would write the same
+  # scan_date and race on the upsert.
+  group: leadflow-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Restore price cache
+        uses: actions/cache@v4
+        with:
+          path: nifty_swing_bot/cache
+          # A new key each day, restoring from the most recent previous one, so
+          # the cache rolls forward instead of going stale on a fixed key.
+          key: leadflow-cache-${{ github.run_id }}
+          restore-keys: |
+            leadflow-cache-
+
+      - name: Verify the database before writing to it
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python -m nifty_swing_bot.aes_scanner.dbcheck
+
+      - name: Run the scan
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        # persist is the DEFAULT; --no-render skips chart PNGs, which a
+        # stateless runner would throw away anyway.
+        run: python -m nifty_swing_bot.aes_scanner --no-render
+
+      - name: Summarise
+        if: always()
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          python - <<'PY'
+          from nifty_swing_bot.aes_scanner.store import AESScanStore
+          s = AESScanStore()
+          d = s.latest_scan_date()
+          rows = s.scans(limit=1)
+          print(f"latest scan: {d}")
+          if not rows.empty:
+              r = rows.iloc[0]
+              print(f"universe={r.universe_size} watchlist={r.watchlist_size} "
+                    f"candidates={r.candidate_count} actionable={r.actionable_count}")
+          print(f"forward record entries: {len(s.forward_record())}")
+          PY

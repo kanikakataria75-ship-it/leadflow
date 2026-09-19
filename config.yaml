@@ -1,0 +1,124 @@
+# Repository-relative, because this file is read by a Windows research machine,
+# a Linux web host and a Linux CI runner. Relative paths are resolved against
+# the repository root by config.Paths.
+paths:
+  cache_dir: nifty_swing_bot/cache
+  ohlcv_dir: nifty_swing_bot/cache/ohlcv
+  delivery_dir: nifty_swing_bot/cache/delivery
+  llm_dir: nifty_swing_bot/cache/llm
+  universe_dir: nifty_swing_bot/cache/universe
+  results_dir: nifty_swing_bot/results
+  db_path: nifty_swing_bot/cache/terminal.db
+universe:
+  include_indices:
+  - niftymidcap150
+  - niftysmallcap250
+  base_index: nifty500
+  exclude_index: nifty100
+  min_avg_turnover_cr: 5.0
+  turnover_lookback_days: 20
+  liquidity_quantile: null
+  min_price: 20.0
+  max_price: null
+  min_history_days: 120
+dab:
+  baseline_excludes_today: true
+  delivery_mode: prior_window
+  delivery_lookback: 20
+  delivery_spike_mult: 3.5
+  delivery_spike_window: 15
+  delivery_spike_min_bars: 6
+  min_delivery_pct: 0.0
+  volume_lookback: 20
+  volume_surge_mult: 2.0
+  close_range_top_pct: 0.3
+  rs_lookback: 10
+  rs_benchmark: ^CRSLDX
+  rs_min_excess: 0.0
+  breakout_lookback: 20
+  breakout_proximity_pct: 0.03
+  vcp_atr_fast: 5
+  vcp_atr_slow: 20
+  vcp_contraction_ratio: 0.7
+mr:
+  trend_ma: 50
+  require_long_trend: false
+  long_trend_ma: 200
+  rsi_period: 2
+  rsi_entry: 10.0
+  rsi_exit: 70.0
+  pullback_lookback: 3
+  min_pullback_pct: 0.0
+  min_volume_ratio: 0.3
+  use_reversion_exit: false
+  exit_ma: 5
+srdr:
+  dislocation_lookback: 3
+  top_n: 3
+  min_dislocation: 0.02
+  trend_ma: 200
+  sector_calm_threshold: 0.04
+  collapse_atr: 3.0
+  gap_threshold: 0.02
+  orphan_gap_threshold: 0.015
+  min_turnover_cr: 2.0
+  hold_bars: 5
+  stop_atr: 2.5
+risk:
+  starting_capital: 1000000.0
+  risk_per_trade_pct: 0.01
+  max_position_pct: 0.1
+  max_open_positions: 10
+  max_portfolio_heat_pct: 0.06
+  atr_stop_period: 14
+  atr_stop_mult: 1.5
+  max_hold_days: 10
+  min_hold_days: 0
+  trail_swing_lookback: 3
+  trail_activate_r: 1.0
+  target_r_multiple: null
+execution:
+  entry_timing: next_open
+  cost_model: india_delivery
+  slippage_bps: 15.0
+  brokerage_bps: 3.0
+  brokerage_flat_inr: 20.0
+  brokerage_pct_cap: 2.5
+  stt_bps_buy: 10.0
+  stt_bps_sell: 10.0
+  stamp_duty_bps_buy: 1.5
+  exchange_txn_bps: 0.297
+  sebi_bps: 0.01
+  gst_pct: 18.0
+  dp_charge_inr: 16.0
+  circuit_band_pct: 0.1
+  gap_through_extra_slippage_bps: 50.0
+  locked_circuit_penalty_pct: 0.02
+  max_participation_pct: 0.02
+backtest:
+  start_date: '2021-01-01'
+  end_date: null
+  benchmark: ^CRSLDX
+  risk_free_rate: 0.065
+  trading_days_per_year: 252
+  wf_train_months: 12
+  wf_test_months: 3
+  wf_step_months: 3
+  wf_optimise: true
+llm:
+  model: claude-sonnet-5
+  max_tokens: 1600
+  temperature: 0.3
+  enabled: true
+  cache_ttl_hours: 24
+data:
+  ohlcv_source: yfinance
+  yf_suffix: .NS
+  yf_batch_size: 40
+  yf_max_workers: 4
+  nse_base_url: https://www.nseindia.com
+  nse_archive_url: https://archives.nseindia.com
+  nse_request_delay_s: 0.8
+  nse_max_retries: 3
+  nse_timeout_s: 30.0
+  cache_ttl_hours: 12

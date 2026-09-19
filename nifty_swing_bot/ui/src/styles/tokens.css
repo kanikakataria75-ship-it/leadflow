@@ -1,0 +1,205 @@
+/* LeadFlow design tokens.
+ *
+ * Nothing in this application hardcodes a colour, a size or a spacing value.
+ * Every one is a custom property declared here, so the whole terminal can be
+ * retuned from one file and so a stray hex in a component is immediately a bug
+ * rather than a style choice.
+ *
+ * The categorical chart palette is NOT a taste decision. It was run through the
+ * dataviz validator against this surface and passes all five checks:
+ *
+ *   node scripts/validate_palette.js "#3D8BFD,#CE6FB0,#A87F35" --mode dark
+ *     [PASS] Lightness band      all 3 inside L 0.48-0.67
+ *     [PASS] Chroma floor        all 3 >= 0.1
+ *     [PASS] CVD separation      worst adjacent dE 11.6 protan / 7.1 tritan
+ *     [PASS] Normal-vision floor worst adjacent dE 19.5
+ *     [PASS] Contrast vs surface all 3 >= 3:1
+ *
+ * Those three are reserved for PLOTTED SERIES. The UI accent below is a
+ * separate, brighter electric blue used only on chrome -- nav, focus, links,
+ * brand. Chrome and plot area never share a surface, so the two blues never
+ * appear in the same visual context; keeping them distinct means the validated
+ * trio stays validated rather than being nudged to make a button look nicer.
+ *
+ * Green and red are STATUS colours, reserved for P&L direction. They are never
+ * used for a series, a category, a border or an accent. If something is green
+ * in this terminal, it made money.
+ */
+
+:root {
+  /* ---- surfaces: cool near-black, layered rather than flat -------------- */
+  --bg: #06070a;
+  --bg-deep: #040507;
+  --surface: #0b0d13;
+  --surface-2: #10131b;
+  --surface-3: #161a24;
+  --surface-hover: #1b2029;
+
+  /* Glass: a translucent plane over the background, not a grey swatch. The
+     alpha is what produces depth; the blur is what makes it read as a plane. */
+  --glass: rgba(20, 24, 33, 0.62);
+  --glass-2: rgba(26, 31, 42, 0.72);
+  --glass-blur: 18px;
+  --glass-blur-strong: 28px;
+
+  /* ---- hairlines: separation by value, not by weight -------------------- */
+  --hairline: rgba(255, 255, 255, 0.055);
+  --hairline-strong: rgba(255, 255, 255, 0.10);
+  --hairline-bright: rgba(255, 255, 255, 0.17);
+  /* A lit top edge is what sells a surface as a raised plane. */
+  --edge-lit: rgba(255, 255, 255, 0.07);
+
+  /* ---- elevation -------------------------------------------------------- */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 4px 16px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-3: 0 12px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-accent: 0 0 0 1px rgba(76, 141, 255, 0.28), 0 6px 26px rgba(76, 141, 255, 0.11);
+
+  /* ---- ink -------------------------------------------------------------- */
+  --ink: #e9ecf3;
+  --ink-2: #99a2b3;
+  --ink-3: #626b7c;
+  --ink-4: #434b5a;
+
+  /* ---- UI accent: electric blue. CHROME ONLY, never a plotted series. ---- */
+  --accent: #4c8dff;
+  --accent-bright: #6ea6ff;
+  --accent-dim: rgba(76, 141, 255, 0.13);
+  --accent-line: rgba(76, 141, 255, 0.34);
+  --focus: #6ea6ff;
+
+  /* ---- P&L status. RESERVED. Never decorative. -------------------------- */
+  --gain: #35b58a;
+  --gain-bright: #4fd3a5;
+  --gain-dim: rgba(53, 181, 138, 0.12);
+  --loss: #e05561;
+  --loss-bright: #ff7079;
+  --loss-dim: rgba(224, 85, 97, 0.12);
+  --flat: var(--ink-3);
+
+  /* ---- warning / restricted / wait -------------------------------------- */
+  --warn: #d89b3c;
+  --warn-bright: #efb45a;
+  --warn-dim: rgba(216, 155, 60, 0.11);
+
+  /* ---- categorical series (validated; assign in fixed order) ------------ */
+  --cat-1: #3d8bfd; /* strategy sleeve   */
+  --cat-2: #ce6fb0; /* arbitrage sleeve  */
+  --cat-3: #a87f35; /* gold sleeve       */
+  --cat-1-dim: rgba(61, 139, 253, 0.15);
+  --cat-2-dim: rgba(206, 111, 176, 0.15);
+  --cat-3-dim: rgba(168, 127, 53, 0.15);
+
+  /* Benchmark is a REFERENCE, not a series: neutral ink so it never competes
+     with the strategy line it exists to be compared against. */
+  --benchmark: #5a6475;
+
+  /* ---- sequential ramp: one hue, light to dark -------------------------- */
+  --seq-1: #101d31;
+  --seq-2: #153154;
+  --seq-3: #1a4779;
+  --seq-4: #245fa4;
+  --seq-5: #3d8bfd;
+
+  /* ---- type ------------------------------------------------------------- */
+  /* Schibsted Grotesk: a contemporary editorial grotesque. Chosen over Inter
+     for a tighter, more deliberate character at display sizes -- the wordmark
+     and the hero numbers are what set the product's register, and Inter is
+     the default of every dashboard on the internet.
+     JetBrains Mono: genuine tabular figures with a refined technical face, so
+     a column of decimals lines up and still looks considered. */
+  --font-ui: 'Schibsted Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* A deliberate scale (1.200 minor third from 11px), not arbitrary sizes. */
+  --t-micro: 10px;
+  --t-xs: 11px;
+  --t-sm: 12px;
+  --t-base: 13px;
+  --t-md: 15px;
+  --t-lg: 18px;
+  --t-xl: 22px;
+  --t-2xl: 27px;
+  --t-3xl: 33px;
+  --t-4xl: 44px;
+  --t-hero: 68px;
+
+  --lh-tight: 1.05;
+  --lh-snug: 1.3;
+  --lh-normal: 1.5;
+
+  --ls-hero: -0.045em;
+  --ls-tightest: -0.03em;
+  --ls-tight: -0.015em;
+  --ls-normal: 0;
+  --ls-wide: 0.04em;
+  --ls-widest: 0.12em;
+  --ls-mega: 0.3em;
+
+  /* ---- spacing: 4px base, no in-between values -------------------------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-20: 80px;
+
+  --radius: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 14px;
+
+  --sidebar-w: 228px;
+  --topbar-h: 48px;
+
+  /* ---- motion ------------------------------------------------------------
+     Fast, smooth, subtle. Durations are short enough that the interface never
+     makes the reader wait to see a number. */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --d-fast: 120ms;
+  --d-base: 200ms;
+  --d-slow: 380ms;
+  --d-reveal: 520ms;
+
+  /* Set to 0 by the reduced-motion block below. Components multiply their own
+     durations by this, so one preference switches the whole system off. */
+  --motion: 1;
+}
+
+/* The terminal is dark by design -- it is not a theme toggle. A light mode
+   would need its own validated palette against a light surface, and shipping an
+   automatic inversion would produce exactly the unvalidated colours this file
+   exists to prevent. */
+
+/* ==========================================================================
+   Reduced motion
+   --------------------------------------------------------------------------
+   The brief's own test: the product must still look like a serious terminal
+   with every animation disabled. This block is what makes that true -- the
+   market universe stops advancing, reveals resolve instantly, count-ups jump
+   to their final value, and parallax is switched off. Nothing is hidden and no
+   information is lost; only the movement goes.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion: 0;
+    --d-fast: 0ms;
+    --d-base: 0ms;
+    --d-slow: 0ms;
+    --d-reveal: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

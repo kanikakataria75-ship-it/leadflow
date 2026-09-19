@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# Nifty Swing Terminal — Python dependencies
+#
+# Tested on Python 3.14 (Windows). Lower bounds reflect what the code actually
+# relies on; upper bounds are avoided so security patches flow through.
+# ---------------------------------------------------------------------------
+
+# Data & numerics
+pandas>=2.2
+numpy>=1.26
+pyarrow>=15.0            # parquet engine for the local cache
+
+# Market data
+yfinance>=0.2.40         # OHLCV + .info fundamentals
+requests>=2.31           # NSE bhavcopy / index constituents
+
+# Config
+pydantic>=2.7
+pydantic-settings>=2.2
+PyYAML>=6.0
+python-dotenv>=1.0
+
+# LLM insight layer
+anthropic>=1.0           # 1.x: messages.parse + output_format
+
+# API
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+
+# Testing
+pytest>=8.0
+
+# Optional: independent cross-validation of the custom backtest engine.
+# Only needed for `python -m nifty_swing_bot.backtest.bt_adapter`.
+backtesting>=0.3.3
+
+# Postgres driver for the deployed forward-record store. Not needed for
+# local development, which falls back to SQLite when DATABASE_URL is unset.
+psycopg[binary]>=3.1
