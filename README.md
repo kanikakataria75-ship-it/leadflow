@@ -40,6 +40,8 @@ To model real-world deployment, the strategy is evaluated within a **30/50/20 Bo
 | **Profit Factor** | 1.59 | - |
 | **Beta (vs Nifty 500)** | 0.219 | 0.053 |
 
+
+### Discovery Window 2: 2022-2026
 | Metric | Strategy Sleeve | Total Book (30/50/20) |
 | :--- | :--- | :--- |
 | **Total Return** | 132.68% | 88.82% |
